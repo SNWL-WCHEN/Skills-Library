@@ -260,7 +260,7 @@
     .showcase-desc { font-size:15px; color:var(--ink-mid); line-height:1.6; }
     .showcase-tags { display:flex; gap:6px; flex-wrap:wrap; }
     .showcase-tag { display:inline-flex; align-items:center; padding:4px 10px; border-radius:4px; font-size:11.5px; font-weight:600; background:#F3E8FF; color:#7C3AED; }
-    .showcase-card-footer { padding:14px 22px; border-top:1.5px solid var(--rule); background:var(--bg); display:flex; gap:10px; }
+    .showcase-card-footer { padding:14px 22px; border-top:1.5px solid var(--rule); background:var(--bg); display:flex; gap:10px; flex-wrap:wrap; }
     .showcase-launch-btn { display:inline-flex; align-items:center; gap:7px; padding:8px 16px; border-radius:var(--radius-sm); background:#7C3AED; border:none; color:#fff; font-size:13.5px; font-weight:600; font-family:inherit; cursor:pointer; text-decoration:none; transition:all 0.15s; }
     .showcase-launch-btn:hover { background:#6D28D9; box-shadow:0 4px 12px rgba(124,58,237,0.3); transform:translateY(-1px); }
 
@@ -535,6 +535,19 @@ const SHOWCASE = [
     tags: ["AI Agent","Product Data","Firewall Matrix","Claude API"],
     url: "https://msazuresonicwall-my.sharepoint.com/:u:/r/personal/wchen_sonicwall_com/Documents/Skills%20Library%20-%20PM%20Showcase/product-matrix-agent.html?csf=1&web=1&e=fPMzl9",
     live: true
+  },
+  {
+    id: "api-hub",
+    name: "API Documentation Hub",
+    owner: "William Chen",
+    ownerInitials: "WC",
+    desc: "Two prototypes for the developer.sonicwall.com/apis initiative (UM-70): a full design prototype of the unified API reference portal, plus a proof-of-concept demoing autonomous persona agents that independently review a problem statement and surface distinct gaps.",
+    tags: ["API Hub","Design Prototype","Persona Agents","UM-70"],
+    links: [
+      { label: "Design Prototype", url: "https://msazuresonicwall-my.sharepoint.com/:u:/r/personal/wchen_sonicwall_com/Documents/Skills%20Library%20-%20PM%20Showcase/developer-sonicwall-apis-v5.html?csf=1&web=1&e=iQBUbB" },
+      { label: "Persona Review Demo", url: "https://msazuresonicwall-my.sharepoint.com/:u:/r/personal/wchen_sonicwall_com/Documents/Skills%20Library%20-%20PM%20Showcase/apihub-persona-review-poc.html?csf=1&web=1&e=PPuVkm" }
+    ],
+    live: true
   }
 ];
 
@@ -748,10 +761,15 @@ render(SKILLS);
         <div class="showcase-tags">${s.tags.map(t=>`<span class="showcase-tag">${t}</span>`).join("")}</div>
       </div>
       <div class="showcase-card-footer">
-        <a class="showcase-launch-btn" href="${s.url}" target="_blank" rel="noopener noreferrer">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Open Tool
-        </a>
+        ${(s.links && s.links.length)
+          ? s.links.map(l=>`<a class="showcase-launch-btn" href="${l.url}" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              ${l.label}
+            </a>`).join("")
+          : `<a class="showcase-launch-btn" href="${s.url}" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Open Tool
+            </a>`}
       </div>
     </div>`).join("");
 })();
