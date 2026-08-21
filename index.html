@@ -726,11 +726,12 @@ function buildCard(s) {
 }
 
 function render(skills) {
+  const sorted = [...skills].sort((a,b)=>a.name.localeCompare(b.name));
   const grid=document.getElementById("grid");
   const empty=document.getElementById("empty-state");
-  grid.innerHTML=skills.map(buildCard).join("");
-  empty.style.display=skills.length===0?"block":"none";
-  document.getElementById("count-label").textContent=`${skills.length} skill${skills.length!==1?"s":""}`;
+  grid.innerHTML=sorted.map(buildCard).join("");
+  empty.style.display=sorted.length===0?"block":"none";
+  document.getElementById("count-label").textContent=`${sorted.length} skill${sorted.length!==1?"s":""}`;
 }
 
 let activeRole="All",activeCat="All";
@@ -772,7 +773,7 @@ render(SKILLS);
 (function renderShowcase() {
   const grid = document.getElementById("showcase-grid");
   if (!grid) return;
-  grid.innerHTML = SHOWCASE.map(s => `
+  grid.innerHTML = [...SHOWCASE].sort((a,b)=>a.name.localeCompare(b.name)).map(s => `
     <div class="showcase-card">
       <div class="showcase-card-stripe"></div>
       <div class="showcase-card-header">
