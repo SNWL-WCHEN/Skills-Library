@@ -198,6 +198,11 @@
     .card-setup-notice svg { flex-shrink:0; margin-top:1px; color:var(--amber); }
     .card-setup-notice a { color:var(--amber); font-weight:600; text-decoration:none; cursor:pointer; }
     .card-setup-notice a:hover { text-decoration:underline; }
+    .card-relates-notice { background:#EEF2FF; border:1px solid #C7D2FE; border-radius:var(--radius-sm); padding:11px 14px; display:flex; gap:9px; align-items:flex-start; font-size:13.5px; color:#3730A3; line-height:1.5; }
+    .card-relates-notice svg { flex-shrink:0; margin-top:1px; color:#4F46E5; }
+    .card-relates-line { margin-bottom:3px; }
+    .card-relates-line:last-child { margin-bottom:0; }
+    .card-relates-target { color:#4F46E5; font-weight:600; }
 
     /* ── PROMPTS ── */
     .prompts-toggle { display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--ink-muted); font-size:14px; font-weight:600; user-select:none; padding:0; background:none; border:none; font-family:inherit; width:100%; text-align:left; transition:color 0.15s; }
@@ -472,8 +477,9 @@
 <script>
 const ONEDRIVE = {
   "account-research":"https://msazuresonicwall-my.sharepoint.com/personal/wchen_sonicwall_com/Documents/Skills%20Library/account-research",
-  "brand-review":"https://msazuresonicwall-my.sharepoint.com/personal/wchen_sonicwall_com/Documents/Skills%20Library/brand-review",
-  "brand-voice":"https://msazuresonicwall-my.sharepoint.com/personal/wchen_sonicwall_com/Documents/Skills%20Library/brand-voice",
+  "brand-review":"https://msazuresonicwall-my.sharepoint.com/:f:/r/personal/wchen_sonicwall_com/Documents/Skills%20Library/brand-review?d=w632ba53a7f4b485a894d0f549a2ff994&csf=1&web=1&e=JwiUas",
+  "brand-voice":"https://msazuresonicwall-my.sharepoint.com/:f:/r/personal/wchen_sonicwall_com/Documents/Skills%20Library/brand-voice?d=wbee43f00c677490682abeec08a55797a&csf=1&web=1&e=6byldQ",
+  "brand-enforcement":"https://msazuresonicwall-my.sharepoint.com/:f:/r/personal/wchen_sonicwall_com/Documents/Skills%20Library/brand-enforcement?d=w91ea57e75ae0416ab7f4af952f9aa91b&csf=1&web=1&e=pq2onb",
   "call-prep":"https://msazuresonicwall-my.sharepoint.com/personal/wchen_sonicwall_com/Documents/Skills%20Library/call-prep",
   "call-summary":"https://msazuresonicwall-my.sharepoint.com/personal/wchen_sonicwall_com/Documents/Skills%20Library/call-summary",
   "campaign-plan":"https://msazuresonicwall-my.sharepoint.com/personal/wchen_sonicwall_com/Documents/Skills%20Library/campaign-plan",
@@ -509,8 +515,9 @@ const ONEDRIVE = {
 
 // Leads per skill
 const LEADS = {
-  "brand-review":            ["Sarah Choi"],
-  "brand-voice":             ["Sarah Choi"],
+  "brand-review":            ["Sarah Choi","Austin Fanning","Brandon Littlefield"],
+  "brand-voice":             ["Sarah Choi","Austin Fanning","Brandon Littlefield"],
+  "brand-enforcement":       ["Sarah Choi","Austin Fanning","Brandon Littlefield"],
   "content-creation":        ["Sarah Choi"],
   "draft-content":           ["Sarah Choi"],
   "create-an-asset":         ["Sarah Choi"],
@@ -522,6 +529,17 @@ const LEADS = {
   "win-loss-analysis":       ["Asif Mujtaba","Victor Buonocore"],
   "jira-epic-writing":       ["William Chen"],
   "ui-prototyping":          ["Aravind Rangaswamy"],
+};
+
+// Cross-references — skills that call on or defer to another skill
+const RELATES = {
+  "brand-voice": [
+    { id:"brand-enforcement", note:"Defers to Brand Enforcement for logo placement and fallback rules." }
+  ],
+  "brand-enforcement": [
+    { id:"brand-voice", note:"Referenced by Brand Voice for logo guidance — pairs well together." },
+    { id:"brand-review", note:"Brand Review checks written content; this skill enforces visual/formatting standards on deliverables." }
+  ]
 };
 
 // Showcase items — team-built tools and prototypes
@@ -555,6 +573,7 @@ const SHOWCASE = [
 const SETUP = {
   "competitive-analysis":"ready","competitive-brief":"ready","competitive-intelligence":"ready",
   "win-loss-analysis":"ready","brand-review":"ready","brand-voice":"ready",
+  "brand-enforcement":"setup",
   "content-creation":"ready","draft-content":"ready","create-an-asset":"ready",
   "campaign-plan":"ready","campaign-planning":"ready","email-sequence":"ready",
   "performance-analytics":"ready","performance-report":"ready","seo-audit":"ready",
@@ -611,8 +630,13 @@ const SKILLS = [
   {id:"daily-briefing",name:"Daily Briefing",icon:"☀️",category:"Sales Enablement",roles:["PM"],desc:"Generates a structured daily priority brief — top deals to act on, follow-ups due, news on key accounts, and a recommended focus order for the day.",pm:"Start every day with clarity on where to focus. Pulls together deal priorities, overdue tasks, and account signals into a single actionable brief.",prompts:["Build my daily brief — here's my open pipeline and tasks for today: [paste]","What should I focus on today given these 8 open opportunities? [paste deal list]","Summarize overnight news on [Company] and [Company] — my two biggest deals","I have 3 calls today — help me prioritize prep time: [paste context]"]},
   {id:"draft-outreach",name:"Draft Outreach",icon:"✉️",category:"Sales Enablement",roles:["PM"],desc:"Writes personalized outreach emails and LinkedIn messages — cold, warm, follow-up, re-engagement, and referral asks — matched to the prospect's role, industry, and trigger event.",pm:"Generate personalized outreach for any situation in 30 seconds. Covers cold prospecting, post-event follow-up, re-engagement, and referral requests.",prompts:["Write a cold email to the CISO at a 500-person financial services firm — we're pitching SonicWall","Follow-up email after RSA — they stopped by our booth and expressed interest in our UM platform","Re-engagement email for a prospect who went dark after a demo 6 weeks ago","LinkedIn message to a potential champion at [Company] — warm intro through a mutual connection"]},
   {id:"jira-epic-writing",name:"Jira Epic Writing",icon:"🎫",category:"Requirements & Design",roles:["PM"],desc:"Selects the right Jira epic format (General, Conditional Logic, Sequential Flows, Performance & Reliability, or Integration & API Contract) based on feature context, then produces a complete Description field and capped Acceptance Criteria for the SonicWall UM team.",pm:"Stop writing epics from scratch. Describe the feature or problem and get a properly formatted epic with the right AC structure, correct format selection, and UM platform context already applied.",prompts:["Write a Jira epic for [feature] — it's a frontend-only UI change on the UM dashboard","Draft an epic for the new tenant onboarding flow — users go through 4 steps sequentially","Create an initiative for the UM support page redesign — problem is still being validated","Write AC for a feature that behaves differently for Super Admin vs Tenant Admin roles","Draft an integration epic — UM needs to call the Theron API to trigger a cross-launch"]},
-  {id:"ui-prototyping",name:"UI Prototyping",icon:"🖥️",category:"Requirements & Design",roles:["PM"],desc:"Generates pixel-accurate SonicWall UI mockups, components, and prototypes strictly enforcing the UUIF 9.2 design system — correct color tokens, typography, spacing, component naming, and nav shell structure for any UM, NSM, WNM, CMC, MSW, CSE, or Capture Client screen.",pm:"Get a production-accurate HTML prototype of any UM screen or flow in minutes. The full UUIF 9.2 token set, component rules, and SonicWall brand constraints are baked in — no guesswork, no off-brand colors or fonts.",prompts:["Build a prototype of the UM tenant management page — include the left nav shell","Design a modal dialog for bulk device assignment — follows UUIF 9.2 modal spec","Mock up the UM dashboard overview card for Capture Client endpoint count","Prototype the 3-step onboarding wizard for new tenant creation in UM","Create a data table component showing firewall inventory with status chips and pagination"]}
+  {id:"ui-prototyping",name:"UI Prototyping",icon:"🖥️",category:"Requirements & Design",roles:["PM"],desc:"Generates pixel-accurate SonicWall UI mockups, components, and prototypes strictly enforcing the UUIF 9.2 design system — correct color tokens, typography, spacing, component naming, and nav shell structure for any UM, NSM, WNM, CMC, MSW, CSE, or Capture Client screen.",pm:"Get a production-accurate HTML prototype of any UM screen or flow in minutes. The full UUIF 9.2 token set, component rules, and SonicWall brand constraints are baked in — no guesswork, no off-brand colors or fonts.",prompts:["Build a prototype of the UM tenant management page — include the left nav shell","Design a modal dialog for bulk device assignment — follows UUIF 9.2 modal spec","Mock up the UM dashboard overview card for Capture Client endpoint count","Prototype the 3-step onboarding wizard for new tenant creation in UM","Create a data table component showing firewall inventory with status chips and pagination"]},
+  {id:"brand-enforcement",name:"Brand Enforcement",icon:"🎨",category:"Brand & Content",roles:["PMM"],desc:"Enforces the SonicWall brand standard on every visual or formatted deliverable — official color palette, typography, the mandatory confidentiality statement, and logo usage — across slide decks, Word docs, spreadsheets, PDFs, HTML dashboards, charts, and Mermaid diagrams.",pmm:"Run this before producing any chart, deck, dashboard, or formatted document so the output automatically carries the correct SonicWall palette, fonts, confidentiality statement, and logo — no manual color-matching required.",prompts:["Apply our brand colors to this chart before I export it","Make this PowerPoint deck on-brand — add the logo and confidentiality statement","What are our official SonicWall brand colors and hex codes?","Fix the colors in this Mermaid diagram to match our palette","Build an on-brand Excel dashboard with the SonicWall color palette applied"]}
 ];
+
+// Display-name lookup for cross-reference notes
+const SKILL_NAMES = {};
+SKILLS.forEach(s => { SKILL_NAMES[s.id] = s.name; });
 
 function buildCard(s) {
   const m = CAT_META[s.category]||{cls:"analytics",stripe:"stripe-analytics",icon:"icon-analytics"};
@@ -654,6 +678,13 @@ function buildCard(s) {
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         <span>For full output, upload <strong>SKILL.md</strong> + all files from the <strong>references/</strong> subfolder into your Claude.ai Project. <a onclick="openModal()">Setup guide →</a></span>
       </div>` : "";
+  const relates = RELATES[s.id]||[];
+  const relatesHtml = relates.length ? `<div class="card-relates-notice">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      <div>
+        ${relates.map(r=>`<div class="card-relates-line"><strong>Related:</strong> ${r.note}${SKILL_NAMES[r.id]?` <span class="card-relates-target">(${SKILL_NAMES[r.id]})</span>`:""}</div>`).join("")}
+      </div>
+    </div>` : "";
   const odLink = ONEDRIVE[s.id];
   const footer = odLink?`<div class="card-footer">
     <a class="download-btn" href="${odLink}" target="_blank" rel="noopener noreferrer">
@@ -678,6 +709,7 @@ function buildCard(s) {
     <div class="card-body">
       <div class="card-desc">${s.desc}</div>
       ${setupNotice}
+      ${relatesHtml}
       ${(s.pm||s.pmm)?'<div class="divider"></div>':''}
       ${roleSection}
       <div class="divider"></div>
