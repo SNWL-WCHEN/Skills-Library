@@ -38,8 +38,3 @@ The goal was never to replace judgment. It was to remove the part of the work th
 
 ---
 
-### Other work
-
-- [Unified API Hub](https://snwl-wchen.github.io/API-hub/) — developer portal for partner API access
-- [SAMI Enablement Demo](https://snwl-wchen.github.io/SAMI_Demo/) — north-star interface for an AI security assistant
-- [Dark Mode UUIF](https://snwl-wchen.github.io/UM-Dark-Mode/) — design system dark mode implementation
